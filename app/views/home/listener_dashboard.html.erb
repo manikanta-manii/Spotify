@@ -1,0 +1,20 @@
+<style>
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+</style>
+<div class="listener-dashboard">
+  <h1>Listener Dashboard</h1>
+    <h3>Name : <%= current_user.name %></h3>
+  <% if current_user.avatar.attached? %>
+    <%= image_tag current_user.avatar ,class: "avatar"%>
+    <%else%>
+<img src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Default Image" class="avatar" >
+       <% end %><br/>
+  <!-- The method: :delete syntax for the sign out link is outdated for newer versions of Rails. In modern Rails applications (Rails 6+), you should use data: { turbo_method: :delete } instead. Here's the corrected version: -->
+  <%= link_to 'Sign Out', destroy_user_session_path, method: :delete ,  data: { turbo_method: :delete }%>
+  <!-- Listener specific content -->
+</div>

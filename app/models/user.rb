@@ -1,12 +1,14 @@
 class User < ApplicationRecord
+  
+  has_one_attached :avatar
+  has_one :artist
+  accepts_nested_attributes_for :artist
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
-
-
-  has_one_attached :avatar
   enum role: [:admin, :artist, :listener]
   after_initialize :set_default_role, if: :new_record?
 
@@ -35,11 +37,9 @@ class User < ApplicationRecord
 
   def self.attach_google_avatar(user, image_url)
     require 'open-uri'
-    
     begin
       filename = "avatar_#{Time.current.to_i}.jpg"
       avatar_file = URI.open(image_url)
-      
       user.avatar.attach(
         io: avatar_file,
         filename: filename,

@@ -16,9 +16,9 @@
     <%else%>
 <img src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Default Image" class="avatar" >
        <% end %> <br/>
-  <a href="#">Manage Albumn(s)</a> <br/>
+  <%= link_to 'Manage Artist(s)', artists_path %><br/>
+  <a href="#">Manage Albumn(s)</a><br/>
   <a href="#">Manage Song(s)</a><br/>
-  <a href="#">Manage Artist(s)</a><br/>
   <%= link_to 'Sign Out', destroy_user_session_path, method: :delete,data: { turbo_method: :delete } %>
   <!-- Admin specific content -->
 </div>

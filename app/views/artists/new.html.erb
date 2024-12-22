@@ -1,0 +1,45 @@
+<% if @artist.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(@artist.errors.count, "error") %> prohibited this artist from being saved:</h2>
+      <ul>
+        <% @artist.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= Time.now()%>
+<%= form_with(model: @artist,local: false ,multipart: true) do |f| %>
+   <%= fields_for :user do |u| %>
+      <div class="form-group">
+        <%= u.label :avatar %>
+        <%= u.file_field :avatar, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= u.label :name %><span style="color:red">*</span>
+        <%= u.text_field :name, class: 'form-control', placeholder: 'Enter your full name' ,required: true%>
+      </div>
+
+      <div class="form-group">
+        <%= u.label :email %><span style="color:red">*</span>
+        <%= u.email_field :email, class: 'form-control', placeholder: 'Enter your email' ,required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= u.label :date_of_birth, 'Date of Birth' %>
+        <%= u.date_field :dob, class: 'form-control' %>
+      </div>
+
+   <% end %>
+
+   <div class="field">
+      <%= f.label :bio, "Biography" %>
+      <%= f.text_area :bio, class: "form-control" %>
+   </div>
+
+  <div class="form-actions">
+    <%= f.submit 'Create Artist', class: 'btn btn-primary' %>
+  </div>
+
+<% end %>

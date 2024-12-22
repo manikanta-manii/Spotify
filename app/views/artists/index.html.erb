@@ -1,0 +1,26 @@
+<style>
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+</style>
+<h3>List of all Artists</h3>
+<% @artists.each do |artist|%>
+  <% @user = User.find_by(id: artist.user_id)%>
+  <% if @user.avatar.attached? %>
+    <%= image_tag @user.avatar ,class: "avatar"%>
+    <%else%>
+<img src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Default Image" class="avatar" >
+       <% end %> <br/>
+  Artist Name : <%= @user.name %>
+  DOB : <%= @user.dob %>
+  BIO : <%= artist.bio %>
+  <%= link_to 'edit' , edit_artist_path(artist) %>
+  <%= link_to 'delete' ,artist_path(artist) , method: :delete ,data: { turbo_method: :delete }%><br/>
+
+<% end %>
+<% if current_user.admin? %>
+  <%=link_to 'create artist' ,new_artist_path %>
+<% end %>

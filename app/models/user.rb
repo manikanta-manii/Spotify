@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   
   has_one_attached :avatar
-  has_one :artist
+  has_one :artist , dependent: :destroy
   accepts_nested_attributes_for :artist
 
   # Include default devise modules. Others available are:

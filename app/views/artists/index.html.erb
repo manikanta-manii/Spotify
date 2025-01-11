@@ -11,7 +11,7 @@
   <% @user = User.find_by(id: artist.user_id)%>
   <% if @user.avatar.attached? %>
     <%= image_tag @user.avatar ,class: "avatar"%>
-    <%else%>
+    <% else %>
 <img src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Default Image" class="avatar" >
        <% end %> <br/>
   Artist Name : <%= @user.name %>

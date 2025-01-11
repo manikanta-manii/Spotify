@@ -6,6 +6,8 @@
     border-radius: 50%;
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <div class="listener-dashboard">
   <h1>Listener Dashboard</h1>
     <h3>Name : <%= current_user.name %></h3>
@@ -17,4 +19,89 @@
   <!-- The method: :delete syntax for the sign out link is outdated for newer versions of Rails. In modern Rails applications (Rails 6+), you should use data: { turbo_method: :delete } instead. Here's the corrected version: -->
   <%= link_to 'Sign Out', destroy_user_session_path, method: :delete ,  data: { turbo_method: :delete }%>
   <!-- Listener specific content -->
+  <hr>
+
+  <div class="audio-player">
+  <div class="now-playing">
+    <span id="current-song-title">No song selected
+  </div>
+  
+  <audio id="audio-element" src=""></audio>
+  
+  <div class="controls">
+    <button id="prev-btn"><i class="fa fa-step-backward"></i></button>
+    <button id="play-btn"><i class="fa fa-play"></i></button>
+    <button id="pause-btn"><i class="fa fa-pause"></i></button>
+    <button id="next-btn"><i class="fa fa-step-forward"></i></button>
+  </div>
 </div>
+
+<div class="playlist">
+  <% Song.all.each do |song| %>
+    <div class="song-item" 
+         data-song-id="<%= song.id %>" 
+         data-song-url="<%= url_for(song.audio_file) if song.audio_file.attached? %>">
+      <%= song.name %>
+    </div>
+  <% end %>
+</div>
+
+
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const audioElement = document.getElementById('audio-element');
+  const playBtn = document.getElementById('play-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const songTitle = document.getElementById('current-song-title');
+  const playlist = document.querySelectorAll('.song-item');
+  
+  let currentSongIndex = 0;
+  
+  // Play button click handler
+  playBtn.addEventListener('click', function() {
+    audioElement.play();
+  });
+  
+  // Pause button click handler
+  pauseBtn.addEventListener('click', function() {
+    audioElement.pause();
+  });
+  
+  // Next button click handler
+  nextBtn.addEventListener('click', function() {
+    currentSongIndex = (currentSongIndex + 1) % playlist.length;
+    playSong(currentSongIndex);
+  });
+  
+  // Previous button click handler
+  prevBtn.addEventListener('click', function() {
+    currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+    playSong(currentSongIndex);
+  });
+  
+  // Play song when clicking on playlist item
+  playlist.forEach((song, index) => {
+    // debugger
+    song.addEventListener('click', function() {
+      currentSongIndex = index;
+      playSong(currentSongIndex);
+    });
+  });
+  
+  function playSong(index) {
+    const selectedSong = playlist[index];
+    const songUrl = selectedSong.dataset.songUrl;
+    const title = selectedSong.textContent.trim();
+    
+    audioElement.src = songUrl;
+    songTitle.textContent = title;
+    audioElement.play();
+  }
+});
+
+  </script>

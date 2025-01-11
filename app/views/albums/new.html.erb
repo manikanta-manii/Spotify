@@ -1,0 +1,176 @@
+<style>
+.song-fields {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+select[multiple] {
+  min-height: 100px;
+}
+</style>
+
+<%= form_with(model: @album, local: false, multipart: true ) do |form| %>
+  <% if @album.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+      <ul>
+        <% @album.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :cover_image %>
+    <%= form.file_field :cover_image, accept: 'image/png,image/jpeg,image/jpg' %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %><span style="color:red">*</span>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :released_date %><span style="color:red">*</span>
+    <%= form.date_field :released_date, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :artist_id, "Music Director" %><span style="color:red">*</span>
+  <%= form.collection_select :artist_id, 
+                         Artist.includes(:user), 
+                         :id, 
+                         :artist_name,
+                         { prompt: "Select a music director" },
+                         { required: true } %>
+  </div>
+
+  <%= fields_for :song do |song| %>
+      <div class="field">
+    <%= song.label :audio_file %>
+    <%= song.file_field :audio_file, 
+                        multiple: true, 
+                        accept: "audio/flac,audio/mp3,audio/aac,audio/mpeg" ,
+                        onchange: "createDynamicFields(this)" %>
+     </div>
+  <% end %>
+
+  <div id="dynamic-fields-container"></div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+
+<script>
+
+const form = document.querySelector('form'); 
+
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Validate song names
+  const songNameInputs = document.querySelectorAll('input[type="text"][required]');
+  let hasEmptyName = false;
+  songNameInputs.forEach(input => {
+    if (!input.value.trim()) {
+      hasEmptyName = true;
+    }
+  });
+
+  // Validate artist selections
+  const fieldsets = document.querySelectorAll('fieldset');
+  let hasNoArtistSelected = false;
+  
+  fieldsets.forEach(fieldset => {
+    const artistCheckboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+    const checked = Array.from(artistCheckboxes).some(cb => cb.checked);
+    if (!checked) {
+      hasNoArtistSelected = true;
+    }
+  });
+
+  if (hasEmptyName) {
+    alert('Please fill in all song names');
+    return false;
+  }
+
+  if (hasNoArtistSelected) {
+    alert('Please select at least one artist for each song');
+    return false;
+  }
+
+  // If validation passes, submit the form
+  form.submit();
+});
+
+function createDynamicFields(input) {
+  const container = document.getElementById('dynamic-fields-container');
+  container.innerHTML = ''; // Clear previous fields
+  
+  Array.from(input.files).forEach((file, index) => {
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'song-fields';
+    
+    // Create name field
+    const nameField = `
+      <div class="field">
+        <label for="song_${index}_name">Name for ${file.name}</label><span style="color:red">*</span>
+        <input type="text" 
+               name="songs_metadata[${index}][name]" 
+               id="song_${index}_name" 
+               value="${file.name.replace(/\.[^/.]+$/, '')}"
+               required>
+      </div>
+    `;
+
+  // Create artists checkboxes
+   const artistsField = `
+  <div class="field artists-checkbox-group" data-required-group="true">
+    <p class="field-label">Artists for ${file.name}</p>
+    <div class="artists-checkboxes">
+      <span>Choose Atleast one Artits/Singer for the selected song</span><span style="color:red">*</span>
+      <%= Artist.all.map { |artist| 
+        %Q{
+          <div class="checkbox-wrapper">
+            <input type="checkbox" 
+                   name="songs_metadata[${index}][artist_ids][]" 
+                   id="song_${index}_artist_#{artist.id}"
+                   value="#{artist.id}">
+            <label for="song_${index}_artist_#{artist.id}">
+              #{artist.artist_name}
+            </label>
+          </div>
+        }
+      }.join.html_safe %>
+    </div>
+  </div>
+`;
+
+    
+    fieldset.innerHTML = `
+      <legend>Metadata for ${file.name}</legend>
+      ${nameField}
+      ${artistsField}
+    `;
+    
+    container.appendChild(fieldset);
+  });
+}
+</script>
+
+
+
+
+<% end %>

@@ -18,7 +18,6 @@ class ArtistsController < ApplicationController
     @artist = Artist.new(artist_params)
 
     if @user.save
-      
       @artist.user = @user
       if @artist.save
         redirect_to artists_path , notice: 'Artist created succesfully'
@@ -54,7 +53,7 @@ class ArtistsController < ApplicationController
 
   def destroy
     if @artist.destroy
-      @artist.user.destroy 
+      @artist.user.destroy
       redirect_to artists_path, notice: 'Artist was successfully deleted.'
     else
       redirect_to artists_path, alert: 'Unable to delete the artist.'

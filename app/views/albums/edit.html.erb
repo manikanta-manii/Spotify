@@ -1,0 +1,65 @@
+<style>
+.song-fields {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+select[multiple] {
+  min-height: 100px;
+}
+</style>
+
+<%= form_with(model: @album, local: false, multipart: true ) do |form| %>
+  <% if @album.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+      <ul>
+        <% @album.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :cover_image %>
+    <%= form.file_field :cover_image, accept: 'image/png,image/jpeg,image/jpg' %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %><span style="color:red">*</span>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :released_date %><span style="color:red">*</span>
+    <%= form.date_field :released_date, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :artist_id, "Music Director" %><span style="color:red">*</span>
+  <%= form.collection_select :artist_id, 
+                         Artist.includes(:user), 
+                         :id, 
+                         :artist_name,
+                         { prompt: "Select a music director" },
+                         { required: true } %>
+  </div>
+  
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+  
+<% end %>

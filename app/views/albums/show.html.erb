@@ -1,0 +1,120 @@
+<style>
+  .album-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.album-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.album-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.album-meta {
+  color: #666;
+  font-size: 1rem;
+}
+
+.album-meta span {
+  margin: 0 10px;
+}
+
+.album-description {
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #f8f9fa;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.songs-section {
+  margin-top: 2rem;
+}
+
+.songs-title {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 1rem 0;
+}
+
+.songs-container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.audio-player {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.song-title {
+  color: #444;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.audio-element {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Custom audio player styling */
+audio::-webkit-media-controls-panel {
+  background-color: #f1f3f4;
+}
+
+audio::-webkit-media-controls-play-button {
+  background-color: #007bff;
+  border-radius: 50%;
+}
+
+audio::-webkit-media-controls-play-button:hover {
+  background-color: #0056b3;
+}
+
+</style>
+<div class="album-container">
+  <div class="album-header">
+    <h1 class="album-title"><%= @album.name %></h1>
+    <p class="album-meta">
+      <span class="release-date">Released: <%= @album.released_date %>
+      <span class="artist-name">Artist: <%= @album.artist.user.name %>
+    </p>
+  </div>
+
+  <div class="album-description">
+    <%= @album.description.present? ? @album.description : "Nothing to display!" %>
+  </div>
+
+  <div class="songs-section">
+    <h3 class="songs-title">Songs</h3>
+    <hr class="divider">
+    
+    <div class="songs-container">
+      <% @album.songs.each do |song| %>
+        <div class="audio-player">
+          <h4 class="song-title"><%= song.name %></h4>
+          <%= audio_tag(url_for(song.audio_file), controls: true, class: "audio-element") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,136 @@
+
+    <style>
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -65%;
+            width: 65%;
+            height: 100%;
+            background-color: var(--color-grey1);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+
+            .drawer-content {
+                padding: 32px;
+                /* height: calc(100% - 80px);
+                overflow-y: auto; */
+                /* padding-bottom: 0; */
+            }
+
+            .drawer-header{
+                padding: 32px;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            .drawer-footer {
+                position: absolute; 
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 16px 32px;
+                border-top: 1px solid #3e3e3e;
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                box-sizing: border-box;
+            }
+
+            .close {
+                color: var(--color-grey3);
+                cursor: pointer;
+                font-size: 20px;
+            }
+
+            .close:hover {
+                color: white;
+            }
+
+            .drawer-btn {
+                padding: 12px 24px;
+                border-radius: 20px;
+                border: none;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+
+            .drawer-btn-cancel {
+                background-color: transparent;
+                color: var(--color-white);
+            }
+
+            .drawer-btn-save {
+                background-color: var(--color-green);
+                color: var(--color-white);
+            }
+
+            .drawer-btn:hover {
+                transform: scale(1.04);
+            }
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer.open .drawer-footer {
+            transform: translateX(0);
+        }
+
+    </style>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+       <div><h2>Title</h2></div>
+       <div><i class="fas fa-times close" onclick="closeDrawer()"></i></div>
+    </div>
+    <div class="drawer-content">
+       ...
+    </div>
+    <div class="drawer-footer">
+        <button type="button" class="drawer-btn drawer-btn-cancel" onclick="closeDrawer()">Cancel</button>
+        <button type="button" class="drawer-btn drawer-btn-save drawer-btn-disabled" disabled>Save</button>
+    </div>
+</div>
+
+<script>
+    const drawer = document.getElementById('drawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const form = document.getElementById('createForm');
+    const body = document.body;
+
+    function openDrawer() {
+        drawer.classList.add('open');
+        drawerOverlay.classList.add('open');
+        body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        drawer.classList.remove('open');
+        drawerOverlay.classList.remove('open');
+        body.style.overflow = 'auto';
+    }
+</script>
+

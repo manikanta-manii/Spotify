@@ -1,0 +1,23 @@
+<% if current_user.admin? %>
+  <%=link_to 'Add Song' ,new_song_path %>
+<% end %>
+<hr>
+
+<% @songs.each do |song|%>
+ <div>
+   <% artists = [] %>
+   <% song.song_artists.each do |artist| %>
+   <% artists << Artist.find(artist.artist_id).user.name %>
+   <% end %>
+   <div>Name: <%= song.name %> | Album: <%= song.album.name %> | <%= artists %></div>
+   <div>
+    <%= audio_tag(url_for(song.audio_file), controls: true, class: "audio-element") %>
+   </div>
+
+   <div><%= link_to 'edit' ,edit_song_path(song) %>  <%= link_to 'delete' ,song_path(song) , method: :delete ,data: { turbo_method: :delete }%></div>
+
+</div>
+
+<hr>
+
+<% end %>

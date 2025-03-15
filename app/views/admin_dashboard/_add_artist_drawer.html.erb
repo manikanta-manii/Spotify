@@ -1,0 +1,249 @@
+
+    <style>
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -25%;
+            width: 25%;
+            height: 100%;
+            background-color: var(--color-grey1);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+            overflow-y: auto; 
+
+            .drawer-content {
+                padding: 32px;
+                margin-bottom: 76px;
+            }
+
+            .drawer-header{
+                padding: 32px;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            .drawer-footer {
+                position: fixed;
+                bottom: 0;
+                /* right: 0; */
+                width: 25%; 
+                padding: 16px 32px;
+                border-top: 1px solid #3e3e3e;
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                box-sizing: border-box;
+                 background-color: var(--color-grey1);
+                 /* right: -65%;
+                 transition: right 0.3s ease; */
+            }
+
+            .close {
+                color: var(--color-grey3);
+                cursor: pointer;
+                font-size: 20px;
+            }
+
+            .close:hover {
+                color: white;
+            }
+
+            /* .btn{
+                border: none !important;
+                border-radius: 20px !important;
+            } */
+
+            .drawer-btn {
+                padding: 12px 24px;
+                border-radius: 20px;
+                border: none;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+
+            .drawer-btn-cancel {
+                background-color: transparent;
+                color: var(--color-white);
+            }
+
+            .btn-success{
+                background-color: var(--color-green);
+                color: var(--color-white);
+            }
+
+            .btn:hover {
+                transform: scale(1.04);
+            }
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer.open .drawer-footer {
+            transform: translateX(0);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b3b3b3;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #3e3e3e;
+            border: 1px solid #3e3e3e;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1db954;
+        }
+
+        .avatar-upload {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            border: 2px solid #3e3e3e;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            background-color: #2a2a2a;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .avatar-preview:hover .avatar-edit {
+            opacity: 1;
+        }
+
+        .avatar-edit i {
+            color: white;
+            font-size: 24px;
+        }
+
+        #avatar {
+            display: none;
+        }
+
+        .drawer-loader-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(18, 18, 18, 0.8); /* Matching your drawer's theme */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002; /* Higher than drawer's z-index */
+}
+
+    </style>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+        <div><h2>Add Artist</h2></div>
+        <div><i class="fas fa-times close drawer-close"></i></div>
+        </div>
+        <div class="drawer-content position-relative">
+            <div class="drawer-loader-container">
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><g><circle cx="16" cy="64" r="16" fill="#1db954"/><circle cx="16" cy="64" r="14.344" fill="#1db954" transform="rotate(45 64 64)"/><circle cx="16" cy="64" r="12.531" fill="#1db954" transform="rotate(90 64 64)"/><circle cx="16" cy="64" r="10.75" fill="#1db954" transform="rotate(135 64 64)"/><circle cx="16" cy="64" r="10.063" fill="#1db954" transform="rotate(180 64 64)"/><circle cx="16" cy="64" r="8.063" fill="#1db954" transform="rotate(225 64 64)"/><circle cx="16" cy="64" r="6.438" fill="#1db954" transform="rotate(270 64 64)"/><circle cx="16" cy="64" r="5.375" fill="#1db954" transform="rotate(315 64 64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="850ms" repeatCount="indefinite"></animateTransform></g></svg>
+    </div>
+        <div id="ajaxErrorPlaceHolder"></div>   
+         <form id="add_artist_form" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="avatar">Profile Photo</label>
+                <div class="avatar-upload">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <div class="avatar-edit">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Name<span class="required">*</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name">
+                <span class="validation-error" style="font-size:small;color:red;display:none">Name should contain atleast 3 characters</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email<span class="required">*</label>
+                <input type="email" id="email" name="email"  placeholder="Enter your email">
+                <span class="validation-error" style="font-size:small;color:red;display:none">Enter a valid email address</span>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="text" id="dob" name="dob" placeholder="Select Date...">
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio"  rows="4"></textarea>
+            </div>
+
+        </div>
+        <div class="drawer-footer">
+            <button type="button" class="drawer-btn drawer-btn-cancel drawer-close">Cancel</button>
+            <button type="submit" id="add_artist_btn" class="btn btn-success w-25" disabled>Add</button>
+        </div>
+    </form>
+    </div>

@@ -1,0 +1,60 @@
+<style>
+  .cover_image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+
+.cover_image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Container styling for the album */
+div {
+  display: inline-block;
+  margin: 20px;
+  text-align: center;
+}
+
+h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.album-actions{
+  display: block;
+}
+
+</style>
+<% if current_user.admin? %>
+  <%=link_to 'create Album' ,new_album_path %>
+<% end %>
+<hr>
+
+<% @albums.each do |album|%>
+ <div>
+  <h3><%= album.name%></h3>
+  <%= link_to album_path(album) do %>
+  <% if album.cover_image.attached? %>
+    <%= image_tag album.cover_image ,class: "cover_image"%>
+  <%else%>
+    <img src="https://community.spotify.com/t5/image/serverpage/image-id/55829iC2AD64ADB887E2A5/image-size/large?v=v2&px=999" class="cover_image">
+  <% end %>
+   <% end %>
+  <div class="album-actions">
+    <%= link_to 'edit' ,edit_album_path(album) %>
+    <%= link_to 'delete' ,album_path(album) , method: :delete ,data: { turbo_method: :delete }%><br/>
+  </div>
+</div>
+
+<% end %>
+
+
+

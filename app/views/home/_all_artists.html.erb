@@ -1,0 +1,43 @@
+<table class="artists-table">
+<thead>
+<tr>
+    <th>Avatar</th>
+    <th>Name</th>
+    <th>Bio</th>
+    <th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<% artists.each do |artist| %>
+    <tr>
+    <td class="avatar-cell">
+        <% if artist.user.avatar.attached? %>
+        <%= image_tag artist.user.avatar, class: "artist-avatar" %>
+        <% else %>
+        <div class="default-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <% end %>
+    </td>
+    <td><%= artist.user.name %></td>
+
+    <td class="bio-cell">
+        <div class="truncate-text"><%= artist.bio %></div>
+    </td>
+    <td class="actions-cell">
+        <button class="action-btn edit-btn" data-artist-id="<%= artist.id %>">
+        <i class="fas fa-edit"></i>
+        </button>
+        <%= button_to '#', 
+            method: :delete, 
+            class: "action-btn delete-btn",
+            data: { confirm: "Are you sure you want to delete this artist?" } do %>
+        <i class="fas fa-trash"></i>
+        <% end %>
+    </td>
+    </tr>
+<% end %>
+</tbody>
+</table>
+
+

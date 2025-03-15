@@ -1,0 +1,342 @@
+
+    <style>
+        :root {
+            --manage-albums-color: #4F1787;
+            --manage-artists-color: #3D3BF3;
+        }
+
+        .music-manager-tab-container {
+            background-color: var(--color-grey1);
+            border-radius: 8px;
+            padding: 8px;
+            display: inline-flex;
+            gap: 8px;
+
+            .tab-button {
+                background: none;
+                border: none;
+                color: var(--color-white);
+                padding: 12px 24px;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .tab-button i {
+                font-size: 16px;
+            }
+
+            .tab-button:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                transform: scale(1.05);
+            }
+
+            .tab-button[data-tab="manage_artists"].active {
+                background-color: var(--manage-artists-color);
+                /* box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3); */
+            }
+
+            .tab-button[data-tab="manage_albums"].active {
+                background-color: var(--manage-albums-color);
+                /* box-shadow: 0 2px 8px rgba(225, 51, 0, 0.3); */
+            }
+
+            .tab-button[data-tab="manage_songs"].active {
+                background-color: var(--color-green);
+                box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
+            }
+        }
+
+    
+        .music-manager-content-section {
+            margin-top: 20px;
+            color: var(--color-white);
+            display: none;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: var(--color-grey1);
+            transition: all 0.3s ease;
+
+            .content-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .create-button {
+                color: var(--color-white);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .create-button:hover {
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+        }
+
+        .music-manager-content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        #manage_songs.active {
+            border-left: 4px solid var(--color-green);
+            .create-button{
+                background-color: var(--color-green);
+            }
+        }
+
+        #manage_albums.active {
+            border-left: 4px solid var(--manage-albums-color);
+            .create-button{
+                background-color: var(--manage-albums-color);
+            }
+        }
+
+        #manage_artists.active {
+            border-left: 4px solid var(--manage-artists-color);
+            .create-button{
+                background-color: var(--manage-artists-color);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .artist-table-container {
+  padding: 20px;
+  background: #121212;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.artists-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ffffff;
+}
+
+.artists-table thead {
+  background: #282828;
+}
+
+.artists-table th {
+  text-align: left;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b3b3b3;
+  border-bottom: 1px solid #333;
+}
+
+.artists-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #282828;
+}
+
+.artists-table tbody tr:hover {
+  background: #282828;
+  transition: background-color 0.2s ease;
+}
+
+.artist-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b3b3b3;
+}
+
+.bio-cell {
+  max-width: 300px;
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  padding: 8px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  color: #1db954;
+  background: rgba(29, 185, 84, 0.1);
+}
+
+.delete-btn:hover {
+  color: #ff5252;
+  background: rgba(255, 82, 82, 0.1);
+}
+
+.edit-btn:hover {
+  color: #1db954;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.pagination a, .pagination span {
+  padding: 8px 16px;
+  border-radius: 500px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.pagination a {
+  background-color: transparent;
+  color: #b3b3b3;
+}
+
+.pagination a:hover {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.pagination .current {
+      background-color: var(--color-green);
+    color: #fff;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    border-radius: 500px;
+}
+
+.pagination .disabled {
+  color: #535353;
+  cursor: not-allowed;
+}
+
+.pagination .previous_page,
+.pagination .next_page {
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+    </style>
+
+    <%= link_to 'Sign Out', destroy_user_session_path, method: :delete,data: { turbo_method: :delete } %>
+    <%= render partial: 'admin_dashboard/analytics' %>
+    <%= render partial: 'admin_dashboard/add_artist_drawer' %>
+
+    <div class="music-manager-tab-container">
+        <button class="tab-button active" data-tab="manage_artists">
+            <i class="fas fa-user-circle"></i>
+            Artists
+        </button>
+        <button class="tab-button" data-tab="manage_albums">
+            <i class="fas fa-compact-disc"></i>
+            Albums
+        </button>
+        <button class="tab-button" data-tab="manage_songs">
+            <i class="fas fa-music"></i>
+            Songs
+        </button>
+    </div>
+
+     <div class="music-manager-content-section active" id="manage_artists">
+        <div class="content-header">
+            <div>
+                <h2>Artists</h2>
+                <p>Manage Artists</p>
+            </div>
+            <button id="add_artist_drawer_btn" class="create-button">
+                <i class="fas fa-plus"></i>Add New Artist
+            </button>
+        </div>
+         <div class="artist-table-container">
+            <%= render partial: 'home/all_artists' , locals: { artists: @artists }%>
+        </div>
+    </div>
+
+    <div class="music-manager-content-section" id="manage_albums">
+        <div class="content-header">
+            <div>
+                <h2>Albums</h2>
+                <p>Manage your Albums</p>
+            </div>
+            <button class="create-button">
+                <i class="fas fa-plus"></i>Add New Album
+            </button>
+        </div>
+        <div class="table-container">
+        </div>
+    </div>
+
+    <div class="music-manager-content-section" id="manage_songs">
+        <div class="content-header">
+            <div>
+                <h2>Songs</h2>
+                <p>Manage your music tracks</p>
+            </div>
+            <button class="create-button">
+                <i class="fas fa-plus"></i>Add New Song
+            </button>
+        </div>
+        <div class="table-container">
+        </div>
+    </div>
+
+<%= javascript_include_tag 'admin_dashboard' %>
+

@@ -1,0 +1,79 @@
+<div class="container">
+  <h2>Edit Song</h2>
+
+  <%= form_with(model: @song, local: true) do |form| %>
+    <% if @song.errors.any? %>
+      <div class="error-messages">
+        <h3><%= pluralize(@song.errors.count, "error") %> prohibited this song from being saved:</h3>
+        <ul>
+          <% @song.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="form-group">
+      <%= form.label :name %><span style="color:red">*</span>
+      <%= form.text_field :name, class: 'form-control',required: true%>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :album_id, "Select Album" %><span style="color:red">*</span>
+      <%= form.collection_select :album_id, Album.all, :id, :name, 
+          { prompt: "Choose an album" }, 
+          { class: "form-control" , required: true} %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :audio_file %>
+      <%= form.file_field :audio_file, class: 'form-control', multiple: false%>
+      <% if @song.audio_file.attached? %>
+        <p>Current file: <%= @song.audio_file.filename %></p>
+      <% end %>
+    </div>
+
+<div class="field">
+  <%= form.label :artist_ids, "Artists" %><span style="color:red">*</span>
+  <div class="checkbox-group">
+    <% artists = Artist.includes(:user) %>
+    <% artists.each do |artist| %>
+      <div class="checkbox-item">
+        <%= check_box_tag 'song[artist_ids][]', 
+                         artist.id, 
+                         @song.artists.include?(artist), 
+                         class: 'artist-checkbox' %>
+        <%= label_tag "artist_#{artist.id}", artist.artist_name %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+    <br>
+    <br>
+
+    <div class="actions">
+      <%= form.submit "Update Song", class: 'btn btn-primary' %>
+
+    </div>
+  <% end %>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  const checkboxes = document.querySelectorAll('.artist-checkbox');
+
+  form.addEventListener('submit', function(event) {
+    const checked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    
+    if (!checked) {
+      event.preventDefault();
+      alert('Please select at least one artist');
+    }
+  });
+});
+
+</script>

@@ -1,0 +1,153 @@
+<%= form_with(model: @song, local: true, multipart: true) do |form| %>
+  <div class="form-group">
+    <%= form.check_box :add_to_existing_album, checked: true, id: 'existing_album_checkbox' %>
+    <%= form.label :add_to_existing_album, "Add song to existing album" %>
+  </div>
+
+  <div id="existing_album_section">
+    <div class="form-group">
+      <%= form.label :album_id, "Select Album" %><span style="color:red">*</span>
+      <%= form.collection_select :album_id, Album.all, :id, :name, 
+          { prompt: "Choose an album" }, 
+          { class: "form-control" , required: true} %>
+    </div>
+    <div class="form-group">
+      <%= fields_for :song do |song| %>
+        <%= song.label :audio_file %><span style="color:red">*</span>
+        <%= song.file_field :audio_file, 
+                            multiple: true, 
+                            accept: "audio/flac,audio/mp3,audio/aac,audio/mpeg" ,
+                            onchange: "createDynamicFields(this)",
+                            required: true %>
+      <% end %>
+    </div>
+
+  <div id="dynamic-fields-container"></div>
+  </div>
+
+  <div id="new_album_section" style="display: none;">
+     <%=link_to 'Create a single album song' ,new_album_path %>
+  </div>
+
+  <%= form.submit  %>
+<% end %>
+
+<script>
+
+  var checkbox = document.getElementById('existing_album_checkbox');
+  var existingAlbumSection = document.getElementById('existing_album_section');
+  var newAlbumSection = document.getElementById('new_album_section');
+
+  function toggleSections() {
+    if (checkbox.checked) {
+      existingAlbumSection.style.display = 'block';
+      newAlbumSection.style.display = 'none';
+    } else {
+      existingAlbumSection.style.display = 'none';
+      newAlbumSection.style.display = 'block';
+    }
+  }
+
+  checkbox.addEventListener('change', toggleSections);
+  // Initial state
+  // toggleSections();
+
+
+
+  const form = document.querySelector('form'); 
+
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Validate song names
+  const songNameInputs = document.querySelectorAll('input[type="text"][required]');
+  let hasEmptyName = false;
+  songNameInputs.forEach(input => {
+    if (!input.value.trim()) {
+      hasEmptyName = true;
+    }
+  });
+
+  // Validate artist selections
+  const fieldsets = document.querySelectorAll('fieldset');
+  let hasNoArtistSelected = false;
+  
+  fieldsets.forEach(fieldset => {
+    const artistCheckboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+    const checked = Array.from(artistCheckboxes).some(cb => cb.checked);
+    if (!checked) {
+      hasNoArtistSelected = true;
+    }
+  });
+
+  if (hasEmptyName) {
+    alert('Please fill in all song names');
+    return false;
+  }
+
+  if (hasNoArtistSelected) {
+    alert('Please select at least one artist for each song');
+    return false;
+  }
+
+  // If validation passes, submit the form
+  form.submit();
+});
+
+function createDynamicFields(input) {
+  const container = document.getElementById('dynamic-fields-container');
+  container.innerHTML = ''; // Clear previous fields
+  
+  Array.from(input.files).forEach((file, index) => {
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'song-fields';
+    
+    // Create name field
+    const nameField = `
+      <div class="field">
+        <label for="song_${index}_name">Name for ${file.name}</label><span style="color:red">*</span>
+        <input type="text" 
+               name="songs_metadata[${index}][name]" 
+               id="song_${index}_name" 
+               value="${file.name.replace(/\.[^/.]+$/, '')}"
+               required>
+      </div>
+    `;
+
+  // Create artists checkboxes
+   const artistsField = `
+  <div class="field artists-checkbox-group" data-required-group="true">
+    <p class="field-label">Artists for ${file.name}</p>
+    <div class="artists-checkboxes">
+      <span>Choose Atleast one Artits/Singer for the selected song</span><span style="color:red">*</span>
+      <%= Artist.all.map { |artist| 
+        %Q{
+          <div class="checkbox-wrapper">
+            <input type="checkbox" 
+                   name="songs_metadata[${index}][artist_ids][]" 
+                   id="song_${index}_artist_#{artist.id}"
+                   value="#{artist.id}">
+            <label for="song_${index}_artist_#{artist.id}">
+              #{artist.artist_name}
+            </label>
+          </div>
+        }
+      }.join.html_safe %>
+    </div>
+  </div>
+`;
+
+    
+    fieldset.innerHTML = `
+      <legend>Metadata for ${file.name}</legend>
+      ${nameField}
+      ${artistsField}
+    `;
+    
+    container.appendChild(fieldset);
+  });
+}
+
+
+
+</script>

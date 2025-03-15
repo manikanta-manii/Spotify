@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  get 'songs/index'
-  get 'albums/index'
+  namespace :admin do
+    root to: 'dashboard#index'
+    resources :songs
+    resources :albums
+    resources :artists
+  end
   devise_for :users , controllers: { registrations: 'users/registrations' , omniauth_callbacks: "users/omniauth_callbacks", sessions: 'users/sessions' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -9,8 +13,16 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root 'home#index'
-  resources :artists 
+  get "admin_dashboard" => "home"
+  get "all_artists" => "home"
+  resources :artists
   resources :albums
   resources :songs
+  resources :playlists do
+    member do
+      post :add_song
+      delete :remove_song
+    end
+  end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_22_175448) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -57,6 +57,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_22_175448) do
     t.index ["user_id"], name: "index_artists_on_user_id", unique: true
   end
 
+  create_table "playlist_songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "playlist_id", null: false
+    t.bigint "song_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id", "song_id"], name: "index_playlist_songs_on_playlist_id_and_song_id", unique: true
+    t.index ["playlist_id"], name: "index_playlist_songs_on_playlist_id"
+    t.index ["song_id"], name: "index_playlist_songs_on_song_id"
+  end
+
+  create_table "playlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "user_id"], name: "index_playlists_on_name_and_user_id", unique: true
+    t.index ["user_id"], name: "index_playlists_on_user_id"
+  end
+
   create_table "song_artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "song_id", null: false
     t.bigint "artist_id", null: false
@@ -94,6 +114,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_22_175448) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "albums", "artists"
   add_foreign_key "artists", "users"
+  add_foreign_key "playlist_songs", "playlists"
+  add_foreign_key "playlist_songs", "songs"
+  add_foreign_key "playlists", "users"
   add_foreign_key "song_artists", "artists"
   add_foreign_key "song_artists", "songs"
   add_foreign_key "songs", "albums"

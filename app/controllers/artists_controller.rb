@@ -1,9 +1,16 @@
 class ArtistsController < ApplicationController
   before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token, only: [:create]
   before_action :set_artist, only: [:show, :edit, :update, :destroy]
 
   def index
-    @artists = Artist.all
+    # debugger
+    @artists = Artist.all.paginate(:page => params[:page], :per_page => 1)
+    if current_user.admin?
+      render partial: 'all_artists' , locals: { artists: @artists }
+    else
+      @artists
+    end
   end
 
   def new
@@ -12,23 +19,45 @@ class ArtistsController < ApplicationController
   end
   
   def create
+    debugger
     @user = User.new(users_params)
     @user.password = 'artist@123'
     @user.role = 1
     @artist = Artist.new(artist_params)
-
-    if @user.save
-      @artist.user = @user
-      if @artist.save
-        redirect_to artists_path , notice: 'Artist created succesfully'
+  
+    respond_to do |format|
+      if @user.save
+        @artist.user = @user
+        if @artist.save
+          # debugger
+          format.json { 
+            render json: {
+              status: :success,
+              message: 'Artist created successfully'
+            }
+          }
+        else
+          # debugger
+          format.json { 
+            render json: {
+              status: :error,
+              message: @artist.errors.full_messages
+            }
+          }
+        end
       else
-        render :new , status: :unprocessable_entity
+        # debugger
+        @artist.errors.merge!(@user.errors)
+        format.json { 
+          render json: {
+            status: :error,
+            message: @artist.errors.full_messages
+          }
+        }
       end
-    else
-      @artist.errors.merge!(@user.errors)
-      render :new, status: :unprocessable_entity
     end
   end
+  
 
   def show
   end

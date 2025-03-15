@@ -1,24 +1,2 @@
-<style>
-  .avatar {
-    vertical-align: middle;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
-</style>
-
-<div class="admin-dashboard">
-  <h1>Admin Dashboard</h1> 
-  <br/>
-  <h3>Name : <%= current_user.name %></h3>
-  <% if current_user.avatar.attached? %>
-    <%= image_tag current_user.avatar ,class: "avatar"%>
-    <%else%>
-<img src="https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Default Image" class="avatar" >
-       <% end %> <br/>
-  <%= link_to 'Manage Artist(s)', artists_path %><br/>
-  <%= link_to 'Manage Album(s)', albums_path %><br/>
-  <%= link_to 'Manage Song(s)', songs_path %><br/>
-  <%= link_to 'Sign Out', destroy_user_session_path, method: :delete,data: { turbo_method: :delete } %>
-  <!-- Admin specific content -->
-</div>
+<%= link_to 'Sign Out', destroy_user_session_path, method: :delete,data: { turbo_method: :delete } %>
+<%= render partial: 'admin_dashboard/analytics'%>

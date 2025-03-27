@@ -280,6 +280,11 @@ body {
 
 }
 
+.offcanvas{
+  background-color: var(--color-grey1) !important;
+  color: var(--color-white) !important;
 
-
-
+  .offcanvas-header span{
+    cursor: pointer;
+  }
+}

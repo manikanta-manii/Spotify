@@ -1,40 +1,4 @@
-<h1>Admin::Dashboard#index</h1>
-<p>Find me in app/views/admin/dashboard/index.html.erb</p>
-<%= Time.now() %>
-<script src="https://bossanova.uk/jspreadsheet/v5/jspreadsheet.js"></script>
-<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v5/jspreadsheet.css" type="text/css" />
-<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v5/jspreadsheet.themes.css" type="text/css" />
-<script src="https://jsuites.net/v5/jsuites.js"></script>
-<link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
-<style>
-:root {
-    --header_color: #888;
-    --header_color_highlighted: #444;
-    --header_background: #313131;
-    --header_background_highlighted: #777;
-    --content_color: #777;
-    --content_color_highlighted: #333;
-    --content_background: #3e3e3e;
-    --content_background_highlighted: #333;
-    --menu_background: #7e7e7e;
-    --menu_background_highlighted: #ebebeb;
-    --menu_color: #ddd;
-    --menu_color_highlighted: #222;
-    --menu_box_shadow: unset;
-    --border_color: #5f5f5f;
-    --border_color_highlighted: #999;
-    --cursor: #333;
-    --selection: #3b3b3b;
-}
-
-.jss_worksheet td{
-  padding: 20px !important;
-}
-
-.jss_content table{
-  width: 100% !important;
-}
-</style>
+<%= render 'analytics'%>
 <div class="admin-dashboard">
   <div class="tabs">
     <%= link_to 'Artists', admin_root_path(tab: 'artists'), 
@@ -44,7 +8,6 @@
     <%= link_to 'Songs', admin_root_path(tab: 'songs'), 
         class: "tab #{@current_tab == 'songs' ? 'active' : ''}" %>
   </div>
-
   <div class="tab-content">
     <%= render partial: @current_tab_partial %>
   </div>

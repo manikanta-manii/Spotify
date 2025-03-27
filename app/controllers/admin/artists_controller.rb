@@ -6,6 +6,7 @@ class Admin::ArtistsController < ApplicationController
   end
 
   def create
+    debugger
   end
 
   def edit

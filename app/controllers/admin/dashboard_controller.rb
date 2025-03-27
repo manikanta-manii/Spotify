@@ -1,5 +1,5 @@
 class Admin::DashboardController < ApplicationController
-  layout 'admin_dashboard'
+
   
   def index
     @current_tab = params[:tab] || 'artists' # Default tab

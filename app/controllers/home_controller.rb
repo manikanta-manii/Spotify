@@ -4,7 +4,7 @@ class HomeController < ApplicationController
 
   def index
     if user_signed_in?
-      render_dashboard_for_role
+      render :home_page
     else
       render :public_home
     end
@@ -21,23 +21,23 @@ class HomeController < ApplicationController
   end
 
   def listener_dashboard
-    @recent_plays = current_user.recently_played
-    @recommended_songs = RecommendationService.new(current_user).generate
-    @followed_artists = current_user.followed_artists
+    # @recent_plays = current_user.recently_played
+    # @recommended_songs = RecommendationService.new(current_user).generate
+    # @followed_artists = current_user.followed_artists
   end
 
   private
 
-  def render_dashboard_for_role
-    case current_user.role
-    when 'admin'
-      redirect_to admin_root_path # Redirect to admin namespace
-    when 'artist'
-      redirect_to artist_dashboard_path
-    when 'listener'
-      redirect_to listener_dashboard_path
-    else
-      redirect_to root_path
-    end
-  end
+  # def render_dashboard_for_role
+  #   case current_user.role
+  #   when 'admin'
+  #     redirect_to admin_root_path # Redirect to admin namespace
+  #   when 'artist'
+  #     redirect_to artist_dashboard_path
+  #   when 'listener'
+  #     render :listener_dashboard
+  #   else
+  #     redirect_to root_path
+  #   end
+  # end
 end

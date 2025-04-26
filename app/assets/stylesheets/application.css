@@ -37,7 +37,10 @@ body {
   line-height: normal !important;
 }
 
+
+
 #navbar-header-container {
+    
     .btn {
       padding: 8px 16px;
       border-radius: 500px;
@@ -45,15 +48,14 @@ body {
       font-size: 16px;
       transition: all 0.3s ease;
     }
-
+    
     .btn:hover {
       transform: scale(1.04);
     }
-
+    
     .btn:active {
       transform: scale(0.96);
     }
-
 
     .avatar-container {
       display: flex;
@@ -278,13 +280,4 @@ body {
   }
 
 
-}
-
-.offcanvas{
-  background-color: var(--color-grey1) !important;
-  color: var(--color-white) !important;
-
-  .offcanvas-header span{
-    cursor: pointer;
-  }
 }

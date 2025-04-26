@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.2"
+ruby "3.2.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
@@ -8,8 +8,10 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
+gem 'sqlite3', '~> 2.0', '>= 2.0.2'
+
 # Use mysql as the database for Active Record
-gem "mysql2", "~> 0.5"
+# gem "mysql2", "~> 0.5"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

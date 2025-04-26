@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,33 +33,33 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "albums", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "albums", force: :cascade do |t|
     t.string "name", null: false
     t.date "released_date", null: false
     t.text "description"
-    t.bigint "artist_id", null: false
+    t.integer "artist_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_albums_on_artist_id"
   end
 
-  create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
+  create_table "artists", force: :cascade do |t|
+    t.integer "user_id", null: false
     t.text "bio"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_artists_on_user_id", unique: true
   end
 
-  create_table "playlist_songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "playlist_id", null: false
-    t.bigint "song_id", null: false
+  create_table "playlist_songs", force: :cascade do |t|
+    t.integer "playlist_id", null: false
+    t.integer "song_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["playlist_id", "song_id"], name: "index_playlist_songs_on_playlist_id_and_song_id", unique: true
@@ -67,19 +67,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
     t.index ["song_id"], name: "index_playlist_songs_on_song_id"
   end
 
-  create_table "playlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "playlists", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "user_id"], name: "index_playlists_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_playlists_on_user_id"
   end
 
-  create_table "song_artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "song_id", null: false
-    t.bigint "artist_id", null: false
+  create_table "song_artists", force: :cascade do |t|
+    t.integer "song_id", null: false
+    t.integer "artist_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_song_artists_on_artist_id"
@@ -87,15 +87,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_11_134850) do
     t.index ["song_id"], name: "index_song_artists_on_song_id"
   end
 
-  create_table "songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "songs", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "album_id", null: false
+    t.integer "album_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["album_id"], name: "index_songs_on_album_id"
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

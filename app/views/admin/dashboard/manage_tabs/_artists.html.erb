@@ -48,26 +48,32 @@
     }
 </style>
 
-<button onclick="Drawer.openFromTemplate('#customDrawer', '30%')">Open Custom Drawer</button>
-
-<div id="customDrawer" class="drawer-template">
-    <div slot="header">
-        <h3>Add Artist</h3>
+<button id="add" onclick="openDrawer()">ADD</button>
+<div id="customDrawerOverLay" class="drawer-overlay"></div>
+<div id="customDrawer" class="drawer-component" style="width: 30%;">
+    <div class="drawer-header">
+        <div slot="header">
+            <h3>Add Artist</h3>
+        </div><span class="close-btn" onclick="closeDrawer()">×</span>
     </div>
-    <div slot="content">
-        <label for="avatar">Profile Photo</label>
-        <div class="avatar-upload">
-            <div class="avatar-preview" id="avatarPreview">
-                <div class="avatar-edit">
-                    <i class="fas fa-edit"></i>
+    <div class="drawer-content">
+        <div slot="content">
+            <label for="avatar">Profile Photo</label>
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatarPreview">
+                    <div class="avatar-edit">
+                        <i class="fas fa-edit"></i>
+                    </div>
                 </div>
+                <input type="file" id="avatar" name="avatar" accept="image/*">
             </div>
-            <input type="file" id="avatar" name="avatar" accept="image/*">
         </div>
     </div>
-    <div slot="footer" class="w-100">
-        <button class="btn btn-save">Save</button>
-        <button class="btn close-drawer-btn btn-cancel">Cancel</button>
+    <div class="drawer-footer">
+        <div slot="footer" class="w-100">
+            <button class="btn btn-save">Save</button>
+            <button class="btn close-drawer-btn btn-cancel" onclick="closeDrawer()">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -90,4 +96,22 @@
             reader.readAsDataURL(file);
         }
     });
+
+    function openDrawer() {
+        const overlay = document.getElementById("customDrawerOverLay");
+        const drawer = document.getElementById("customDrawer");
+
+        overlay.classList.add("show");
+        drawer.classList.add("open");
+    }
+
+    // Close the drawer by hiding overlay and drawer
+    function closeDrawer() {
+        const overlay = document.getElementById("customDrawerOverLay");
+        const drawer = document.getElementById("customDrawer");
+
+
+        overlay.classList.remove("show");
+        drawer.classList.remove("open");
+    }
 </script>

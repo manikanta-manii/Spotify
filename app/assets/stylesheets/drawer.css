@@ -2,9 +2,7 @@
 :root {
     --drawer-default-width: 300px;
   }
-  .drawer-template{
-    display: none;
-}
+
   .drawer-component {
     
     .btn {

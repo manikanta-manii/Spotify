@@ -46,11 +46,47 @@
     #avatar {
         display: none;
     }
-</style>
 
+    form {
+
+        input,
+        select,
+        textarea {
+            background: hsla(0, 0%, 100%, .1);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--color-white);
+            padding: 12px;
+            width: 100%;
+            resize: none;
+        }
+
+        input,
+        select {
+            height: 40px;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+    }
+
+    .form-group {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<!-- Pikaday CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
+<!-- jQuery (optional, for convenience) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Pikaday JS -->
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 <button id="add" onclick="openDrawer()">ADD</button>
 <div id="customDrawerOverLay" class="drawer-overlay"></div>
-<div id="customDrawer" class="drawer-component" style="width: 30%;">
+<div id="customDrawer" class="drawer-component" style="width: 20%;">
     <div class="drawer-header">
         <div slot="header">
             <h3>Add Artist</h3>
@@ -58,15 +94,41 @@
     </div>
     <div class="drawer-content">
         <div slot="content">
-            <label for="avatar">Profile Photo</label>
-            <div class="avatar-upload">
-                <div class="avatar-preview" id="avatarPreview">
-                    <div class="avatar-edit">
-                        <i class="fas fa-edit"></i>
+            <%= form_for( '#' , remote: true) do |f| %>
+            <div class="form-group">
+                <label for="avatar">Profile Photo</label>
+                <div class="avatar-upload">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <div class="avatar-edit">
+                            <i class="fas fa-edit"></i>
+                        </div>
                     </div>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
                 </div>
-                <input type="file" id="avatar" name="avatar" accept="image/*">
             </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" />
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of birth</label>
+                <input type="text" id="dob" autocomplete="off" />
+            </div>
+
+            <div class="form-group">
+                <label for="bio">BIO</label>
+                <textarea id="bio" name="bio" rows="5"></textarea>
+            </div>
+
+            <% end %>
+
+
         </div>
     </div>
     <div class="drawer-footer">
@@ -78,6 +140,12 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        var picker = new Pikaday({
+            field: document.getElementById('dob'),
+            position: 'top right'
+        });
+    });
     const avatarInput = $('#avatar');
     const avatarPreview = $('#avatarPreview');
 
